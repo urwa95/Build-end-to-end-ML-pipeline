@@ -1,0 +1,13 @@
+name: test_regression_model
+
+conda_env: conda.yml
+
+entry_points:
+  main:
+    parameters:
+      mlflow_model: {type: str, description: "W&B artifact for prod model (e.g., random_forest_export:prod)"}
+      test_artifact: {type: str, description: "W&B artifact for test data (e.g., test_data.csv:latest)"}
+      kl_threshold: {type: float, description: "KL threshold for distribution check"}
+      min_price: {type: float, description: "Minimum price bound"}
+      max_price: {type: float, description: "Maximum price bound"}
+    command: python run.py --mlflow_model {mlflow_model} --test_artifact {test_artifact} --kl_threshold {kl_threshold} --min_price {min_price} --max_price {max_price}

@@ -1,0 +1,16 @@
+name: basic_cleaning
+
+conda_env: conda.yml
+
+entry_points:
+  main:
+    parameters:
+      input_artifact: {type: str, description: "W&B artifact name for raw data (e.g., sample.csv:latest)"}
+      output_artifact: {type: str, description: "Name for cleaned data artifact (e.g., clean_sample.csv)"}
+      output_type: {type: str, description: "Type for the output artifact (e.g., clean_sample)"}
+      output_description: {type: str, description: "Description for the cleaned data artifact"}
+      min_price: {type: float, description: "Minimum price to keep"}
+      max_price: {type: float, description: "Maximum price to keep"}
+    command: >
+      python run.py --input_artifact {input_artifact} --output_artifact {output_artifact} --output_type {output_type} --output_description "{output_description}" --min_price {min_price} --max_price {max_price}
+
