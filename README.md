@@ -2,6 +2,15 @@ Build an ML Pipeline for Short-term Rental Prices in NYC
 
 This repository contains an end-to-end machine learning pipeline for predicting short-term rental prices in New York City. The pipeline is orchestrated with MLflow and Hydra, and each step logs artifacts and metrics to Weights & Biases (W&B).
 
+# Build an ML Pipeline for Short-term Rental Prices in NYC
+
+**Weights & Biases project (public):**  
+https://wandb.ai/urwa95/nyc_airbnb  
+
+**GitHub repository (v1.0.1 release):**  
+https://github.com/urwa95/Build-end-to-end-ML-pipeline
+
+
 📂 Repository Structure
 
 build-ml-pipeline-for-short-term-rental-prices/
