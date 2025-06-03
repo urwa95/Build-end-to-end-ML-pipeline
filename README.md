@@ -3,7 +3,7 @@
 This repository contains an end-to-end machine learning pipeline for predicting short-term rental prices in New York City. The pipeline is orchestrated with MLflow and Hydra, and each step logs artifacts and metrics to Weights & Biases (W&B).
 
 ## Weights & Biases Project (Public)
-https://wandb.ai/urwa95/nyc_airbnb
+https://wandb.ai/urwah-khatoon-/nyc_airbnb/overview
 
 ## GitHub Repository (v1.0.1 Release)
 https://github.com/urwa95/Build-end-to-end-ML-pipeline
