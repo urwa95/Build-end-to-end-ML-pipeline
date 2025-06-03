@@ -1,86 +1,41 @@
 import argparse
-import pandas as pd
 import wandb
-
+import pandas as pd
 
 def go(args):
-    # Start a new W&B run
     run = wandb.init(job_type="basic_cleaning")
-    run.config.update(
-        {
-            "input_artifact": args.input_artifact,
-            "output_artifact": args.output_artifact,
-            "min_price": args.min_price,
-            "max_price": args.max_price,
-        }
-    )
+    run.config.update(args)
 
-    # Download the input artifact (raw data)
-    artifact = run.use_artifact(args.input_artifact)
-    local_path = artifact.file()
-    df = pd.read_csv(local_path)
+    # download the artifact from W&B
+    artifact_local_path = run.use_artifact(args.input_artifact).file()
+    df = pd.read_csv(artifact_local_path)
 
-    # Basic cleaning:
-    #   1) Drop rows with price outside [min_price, max_price]
-    idx = df["price"].between(args.min_price, args.max_price)
-    df = df[idx].copy()
+    # 1) existing price filter
+    df = df[df["price"].between(args.min_price, args.max_price)]
 
-    #   2) Convert last_review to datetime
-    df["last_review"] = pd.to_datetime(df["last_review"])
+    # 2) remove out‐of‐NYC points
+    df = df[
+        df["longitude"].between(-74.25, -73.50) &
+        df["latitude"].between(40.50, 40.90)
+    ]
 
-    # Save cleaned data locally
+    # 3) save & log the cleaned CSV
     df.to_csv("clean_sample.csv", index=False)
-
-    # Create and log a new W&B artifact for the cleaned data
-    cleaned_artifact = wandb.Artifact(
-        args.output_artifact,
+    artifact = wandb.Artifact(
+        args.output_name,
         type=args.output_type,
         description=args.output_description,
     )
-    cleaned_artifact.add_file("clean_sample.csv")
-    run.log_artifact(cleaned_artifact)
-
-    run.finish()
-
+    artifact.add_file("clean_sample.csv")
+    run.log_artifact(artifact)
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="A very basic data cleaning step")
-    parser.add_argument(
-        "--input_artifact",
-        type=str,
-        help="W&B artifact name for raw data (e.g., sample.csv:latest)",
-        required=True,
-    )
-    parser.add_argument(
-        "--output_artifact",
-        type=str,
-        help="Name for cleaned data artifact (e.g., clean_sample.csv)",
-        required=True,
-    )
-    parser.add_argument(
-        "--output_type",
-        type=str,
-        help="Type for cleaned data artifact (e.g., clean_sample)",
-        required=True,
-    )
-    parser.add_argument(
-        "--output_description",
-        type=str,
-        help="Description for the cleaned data artifact",
-        required=True,
-    )
-    parser.add_argument(
-        "--min_price",
-        type=float,
-        help="Minimum price to keep",
-        required=True,
-    )
-    parser.add_argument(
-        "--max_price",
-        type=float,
-        help="Maximum price to keep",
-        required=True,
-    )
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--input_artifact",    type=str,   required=True)
+    parser.add_argument("--output_name",       type=str,   required=True)
+    parser.add_argument("--output_type",       type=str,   required=True)
+    parser.add_argument("--output_description",type=str,   required=True)
+    parser.add_argument("--min_price",         type=float, required=True)
+    parser.add_argument("--max_price",         type=float, required=True)
     args = parser.parse_args()
     go(args)
-
