@@ -36,15 +36,6 @@ build-ml-pipeline-for-short-term-rental-prices/
 ├── config.yaml  ← Hydra configuration file
 └── README.md  ← you are here
 ```
-
-## Live Project on W&B
-A public W&B project has been set up so you can verify each step’s outputs and artifacts. You can view all runs and artifacts here:
-**W&B Project URL:** https://wandb.ai/urwa95/nyc_airbnb
-
-## GitHub Repository
-All code is hosted publicly on GitHub. Feel free to clone or fork:
-**GitHub Repo URL:** https://github.com/urwa95/Build-end-to-end-ML-pipeline
-
 ## Installation & Setup
 
 1. Clone this repository
